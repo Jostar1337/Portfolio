@@ -1,0 +1,187 @@
+.music-player-container {
+    position: absolute;
+    left: 40px;
+    top: 100px;
+    width: 320px;
+    padding: 20px;
+    border-radius: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: fadeInLeft 0.8s var(--ease-out-expo) both;
+    z-index: 9999;
+    background: rgba(15, 20, 35, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+}
+
+.album-cover-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 20px;
+    overflow: hidden; /* Important for sliding animation */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.album-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out-expo), opacity 0.3s ease;
+}
+
+/* Sliding Animations */
+@keyframes slideRightOut {
+    to { transform: translateX(100%) scale(0.9); opacity: 0; }
+}
+@keyframes slideRightIn {
+    from { transform: translateX(-100%) scale(0.9); opacity: 0; }
+    to { transform: translateX(0) scale(1); opacity: 1; }
+}
+@keyframes slideLeftOut {
+    to { transform: translateX(-100%) scale(0.9); opacity: 0; }
+}
+@keyframes slideLeftIn {
+    from { transform: translateX(100%) scale(0.9); opacity: 0; }
+    to { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+.slide-right-out { animation: slideRightOut 0.4s var(--ease-out-expo) forwards; }
+.slide-right-in { animation: slideRightIn 0.4s var(--ease-out-expo) forwards; }
+.slide-left-out { animation: slideLeftOut 0.4s var(--ease-out-expo) forwards; }
+.slide-left-in { animation: slideLeftIn 0.4s var(--ease-out-expo) forwards; }
+
+.album-cover-img.yt-thumb {
+    transform: scale(1.35); /* Only zoom if it's a YouTube thumbnail with bars */
+}
+
+.music-info-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.music-title-large {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.music-artist-large {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.music-progress-vertical {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.progress-bar-wrapper-large {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.progress-bar-fill-large {
+    height: 100%;
+    background: #fff;
+    width: 0%;
+    border-radius: 3px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.music-controls-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    margin-top: 4px;
+}
+
+.control-btn-large {
+    background: none;
+    border: none;
+    color: #fff;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-out-expo);
+}
+
+.control-btn-large:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+.control-btn-large svg {
+    width: 28px;
+    height: 28px;
+}
+
+.play-pause-btn-large {
+    width: 56px;
+    height: 56px;
+    background: #fff;
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.play-pause-btn-large:hover {
+    transform: scale(1.1);
+}
+
+/* Shifting ONLY the exact hero container to the right */
+@media (min-width: 1025px) {
+    .hero-shifted-for-player {
+        margin-left: 380px !important;
+        width: calc(100% - 380px) !important;
+        transition: margin-left 0.5s var(--ease-out-expo);
+    }
+}
+
+.spotify-mini-wrap {
+    height: 80px;
+    margin-top: 4px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Mobile adjustments */
+@media (max-width: 1024px) {
+    .music-player-container {
+        position: relative;
+        left: 0;
+        top: 0;
+        margin: 20px auto;
+        width: 100%;
+        max-width: 340px;
+    }
+}
+
+/* Remove dark navbar background - keep buttons visible */
+nav,
+nav > div,
+header,
+header > div,
+[class*="Nav"],
+[class*="nav"],
+[class*="Header"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom: none !important;
+}
