@@ -10,6 +10,7 @@
     var ytPlayer = null;
     var isPlaying = false;
     var playerReady = false;
+    var userInteracted = false;
 
     // ==============================
     // 1. BUILD THE PLAYER UI
@@ -87,9 +88,16 @@
                 onReady: function(e) {
                     console.log('[MusicPlayer] YouTube ready!');
                     playerReady = true;
-                    e.target.setVolume(100);
-                    e.target.playVideo();
-                    setPlayingUI(true);
+                    if (userInteracted) {
+                        e.target.unMute();
+                        e.target.setVolume(100);
+                        e.target.playVideo();
+                        setPlayingUI(true);
+                    } else {
+                        // Try muted autoplay - browsers often allow this
+                        e.target.mute();
+                        e.target.playVideo();
+                    }
                 },
                 onStateChange: function(e) {
                     if (e.data === YT.PlayerState.ENDED) {
@@ -109,22 +117,25 @@
 
     // Autoplay on first user interaction (browser requires at least one click)
     function setupAutoplayOnInteraction() {
-        var triggered = false;
         function tryAutoplay() {
-            if (triggered) return;
+            if (userInteracted) return;
+            userInteracted = true;
             if (ytPlayer && playerReady) {
+                ytPlayer.unMute();
+                ytPlayer.setVolume(100);
                 ytPlayer.playVideo();
                 setPlayingUI(true);
-                triggered = true;
-                document.removeEventListener('click', tryAutoplay);
-                document.removeEventListener('touchstart', tryAutoplay);
-                document.removeEventListener('keydown', tryAutoplay);
                 console.log('[MusicPlayer] Autoplay triggered by user interaction');
             }
+            document.removeEventListener('click', tryAutoplay);
+            document.removeEventListener('touchstart', tryAutoplay);
+            document.removeEventListener('keydown', tryAutoplay);
+            document.removeEventListener('scroll', tryAutoplay);
         }
         document.addEventListener('click', tryAutoplay);
         document.addEventListener('touchstart', tryAutoplay);
         document.addEventListener('keydown', tryAutoplay);
+        document.addEventListener('scroll', tryAutoplay);
     }
     setupAutoplayOnInteraction();
 
