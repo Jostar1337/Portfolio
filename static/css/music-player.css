@@ -143,6 +143,69 @@
     transform: scale(1.1);
 }
 
+.volume-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 0 4px;
+}
+
+.volume-icon {
+    width: 18px;
+    height: 18px;
+    color: rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 32px; /* Large invisible hitbox */
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 13.5px 0; /* Centers the 5px track inside 32px */
+    background-clip: content-box !important; /* Ensures JS gradient only fills the track */
+}
+
+.volume-slider::-webkit-slider-runnable-track {
+    height: 5px;
+    background: transparent; /* Background is handled by the input element itself via JS */
+    border-radius: 3px;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+    margin-top: -4.5px; /* (5px track / 2) - (14px thumb / 2) */
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.volume-slider:hover::-webkit-slider-thumb {
+    transform: scale(1.25);
+}
+
+.volume-slider::-moz-range-track {
+    height: 5px;
+    background: transparent;
+    border-radius: 3px;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
 /* Shifting ONLY the exact hero container to the right */
 @media (min-width: 1025px) {
     .hero-shifted-for-player {
