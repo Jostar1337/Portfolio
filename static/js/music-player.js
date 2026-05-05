@@ -79,7 +79,7 @@
             width: '1',
             videoId: PLAYLIST[currentTrackIndex].youtubeId,
             playerVars: {
-                autoplay: 1,
+                autoplay: 0,
                 controls: 0,
                 disablekb: 1,
                 playsinline: 1
@@ -93,10 +93,6 @@
                         e.target.setVolume(100);
                         e.target.playVideo();
                         setPlayingUI(true);
-                    } else {
-                        // Try muted autoplay - browsers often allow this
-                        e.target.mute();
-                        e.target.playVideo();
                     }
                 },
                 onStateChange: function(e) {
@@ -115,24 +111,43 @@
         });
     }
 
-    // Autoplay on first user interaction (browser requires at least one click)
+    // Autoplay on first user interaction (triggered by splash screen)
     function setupAutoplayOnInteraction() {
         function tryAutoplay() {
             if (userInteracted) return;
             userInteracted = true;
+            
+            // Hide splash screen
+            var splash = document.getElementById('enter-screen');
+            if (splash) {
+                splash.classList.add('hidden');
+                setTimeout(function() {
+                    splash.remove();
+                }, 1000);
+            }
+
             if (ytPlayer && playerReady) {
                 ytPlayer.unMute();
                 ytPlayer.setVolume(100);
                 ytPlayer.playVideo();
                 setPlayingUI(true);
-                console.log('[MusicPlayer] Autoplay triggered by user interaction');
+                console.log('[MusicPlayer] Autoplay triggered by splash screen');
             }
+            
             document.removeEventListener('click', tryAutoplay);
             document.removeEventListener('touchstart', tryAutoplay);
             document.removeEventListener('keydown', tryAutoplay);
             document.removeEventListener('scroll', tryAutoplay);
         }
-        document.addEventListener('click', tryAutoplay);
+        
+        // Listen for clicks on the splash screen button specifically
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.enter-action')) {
+                tryAutoplay();
+            }
+        });
+        
+        // Fallback for general interaction
         document.addEventListener('touchstart', tryAutoplay);
         document.addEventListener('keydown', tryAutoplay);
         document.addEventListener('scroll', tryAutoplay);
@@ -263,8 +278,21 @@
 
         currentTrackIndex = Math.floor(Math.random() * PLAYLIST.length);
 
-        var html = createPlayerHTML();
-        document.body.insertAdjacentHTML('beforeend', html);
+        var splashHtml = '<div class="enter-screen" id="enter-screen">' +
+            '<div class="enter-portal">' +
+                '<div class="portal-ring portal-ring-1"></div>' +
+                '<div class="portal-ring portal-ring-2"></div>' +
+                '<div class="portal-ring portal-ring-3"></div>' +
+                '<div class="enter-center">' +
+                    '<div class="enter-title">' + (window.SITE_CONFIG.profile.name || 'ASHRAF') + '</div>' +
+                    '<div class="enter-sub"></div>' +
+                    '<div class="enter-action">ENTER PORTAL</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+
+        var playerHtml = createPlayerHTML();
+        document.body.insertAdjacentHTML('beforeend', splashHtml + playerHtml);
 
         var playBtn = document.getElementById('player-play-pause');
         var nextBtn = document.getElementById('player-next');
