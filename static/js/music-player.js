@@ -286,7 +286,7 @@
                 '<div class="enter-center">' +
                     '<div class="enter-title">' + (window.SITE_CONFIG.profile.name || 'ASHRAF') + '</div>' +
                     '<div class="enter-sub"></div>' +
-                    '<div class="enter-action">ENTER PORTAL</div>' +
+                    '<div class="enter-action">CLICK ME</div>' +
                 '</div>' +
             '</div>' +
         '</div>';
